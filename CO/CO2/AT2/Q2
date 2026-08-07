@@ -1,0 +1,52 @@
+# Morphological Parser for Sentiment Analysis
+
+words = ["disagree", "agreement", "agreeable"]
+
+def parse_word(word):
+    prefix = ""
+    suffix = ""
+    root = "agree"
+    category = ""
+    meaning = ""
+
+    if word.startswith("dis"):
+        prefix = "dis-"
+        category = "Derivational (Prefix)"
+        meaning = "Negation/Opposite of agree"
+
+    elif word.endswith("ment"):
+        suffix = "-ment"
+        category = "Derivational (Noun Formation)"
+        meaning = "State or result of agreeing"
+
+    elif word.endswith("able"):
+        suffix = "-able"
+        category = "Derivational (Adjective Formation)"
+        meaning = "Capable of being agreed with"
+
+    return {
+        "Original": word,
+        "Prefix": prefix,
+        "Root": root,
+        "Suffix": suffix,
+        "Category": category,
+        "Meaning": meaning,
+        "Normalized": root
+    }
+
+print("=" * 80)
+print("MORPHOLOGICAL PARSER REPORT")
+print("=" * 80)
+
+for word in words:
+    r = parse_word(word)
+
+    print(f"""
+Original Word : {r['Original']}
+Prefix        : {r['Prefix']}
+Root          : {r['Root']}
+Suffix        : {r['Suffix']}
+Category      : {r['Category']}
+Meaning       : {r['Meaning']}
+Normalized    : {r['Normalized']}
+""")
