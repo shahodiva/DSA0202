@@ -1,0 +1,45 @@
+# Morphology-Based Normalization
+
+words = ["govern", "government", "governance"]
+
+def normalize(word):
+
+    root = "govern"
+    suffix = ""
+    level = ""
+
+    if word == "govern":
+        level = "Level 0 (Base Word)"
+
+    elif word.endswith("ment"):
+        suffix = "-ment"
+        level = "Level 1 Derivation"
+
+    elif word.endswith("ance"):
+        suffix = "-ance"
+        level = "Level 1 Derivation"
+
+    return {
+        "Original": word,
+        "Root": root,
+        "Suffix": suffix,
+        "Hierarchy": level,
+        "Normalized": root
+    }
+
+print("=" * 80)
+print("NORMALIZATION REPORT")
+print("=" * 80)
+
+for word in words:
+
+    r = normalize(word)
+
+    print(f"""
+Original Word      : {r['Original']}
+Root               : {r['Root']}
+Detected Affix     : {r['Suffix']}
+Derivational Level : {r['Hierarchy']}
+Normalized Form    : {r['Normalized']}
+Output             : {r['Normalized']}
+""")
