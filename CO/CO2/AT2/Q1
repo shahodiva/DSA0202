@@ -1,0 +1,48 @@
+# Morphological Processing for Search Engine Indexing
+
+words = ["analyzing", "analysis", "analytical"]
+
+def analyze_word(word):
+    result = {
+        "Original Word": word,
+        "Root": "",
+        "Affix": "",
+        "Transformation": "",
+        "Normalized": "analyze"
+    }
+
+    if word.endswith("ing"):
+        result["Root"] = "analyze"
+        result["Affix"] = "-ing"
+        result["Transformation"] = "Inflectional (Present Participle)"
+
+    elif word.endswith("sis"):
+        result["Root"] = "analyze"
+        result["Affix"] = "-sis"
+        result["Transformation"] = "Derivational (Noun Formation)"
+
+    elif word.endswith("ical"):
+        result["Root"] = "analyze"
+        result["Affix"] = "-ical"
+        result["Transformation"] = "Derivational (Adjective Formation)"
+
+    else:
+        result["Root"] = word
+        result["Transformation"] = "Base Form"
+
+    return result
+
+print("=" * 80)
+print("MORPHOLOGICAL PROCESSING REPORT")
+print("=" * 80)
+
+for word in words:
+    r = analyze_word(word)
+    print(f"""
+Original Word : {r['Original Word']}
+Root          : {r['Root']}
+Affix         : {r['Affix']}
+Transformation: {r['Transformation']}
+Normalized    : {r['Normalized']}
+Morphology    : {r['Root']} + {r['Affix']}
+""")
