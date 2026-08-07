@@ -1,0 +1,55 @@
+# Morphological Parsing for Document Classification
+
+words = ["activate", "activation", "reactivation"]
+
+def parse(word):
+
+    prefix = ""
+    suffix = ""
+    root = "act"
+    sequence = ""
+    meaning = ""
+
+    if word == "activate":
+        suffix = "-ivate"
+        sequence = "act → activate"
+        meaning = "Verb Formation"
+
+    elif word == "activation":
+        suffix = "-ivation"
+        sequence = "act → activate → activation"
+        meaning = "Verb → Noun"
+
+    elif word == "reactivation":
+        prefix = "re-"
+        suffix = "-ivation"
+        sequence = "act → activate → activation → reactivation"
+        meaning = "Again + Action"
+
+    return {
+        "Original": word,
+        "Prefix": prefix,
+        "Root": root,
+        "Suffix": suffix,
+        "Sequence": sequence,
+        "Meaning": meaning,
+        "Normalized": root
+    }
+
+print("=" * 80)
+print("DOCUMENT CLASSIFICATION REPORT")
+print("=" * 80)
+
+for word in words:
+
+    r = parse(word)
+
+    print(f"""
+Original Word : {r['Original']}
+Prefix        : {r['Prefix']}
+Root          : {r['Root']}
+Suffix        : {r['Suffix']}
+Sequence      : {r['Sequence']}
+Meaning       : {r['Meaning']}
+Normalized    : {r['Normalized']}
+""")
