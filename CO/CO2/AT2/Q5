@@ -1,0 +1,45 @@
+# Inflectional Morphology-Based Normalization
+
+words = ["create", "creates", "creating"]
+
+def process(word):
+
+    suffix = ""
+    grammar = ""
+    root = "create"
+
+    if word == "create":
+        grammar = "Base Form"
+
+    elif word.endswith("s"):
+        suffix = "-s"
+        grammar = "Third-Person Singular"
+
+    elif word.endswith("ing"):
+        suffix = "-ing"
+        grammar = "Present Participle"
+
+    return {
+        "Original": word,
+        "Suffix": suffix,
+        "Grammar": grammar,
+        "Root": root,
+        "Normalized": root
+    }
+
+print("=" * 80)
+print("INFLECTIONAL MORPHOLOGY REPORT")
+print("=" * 80)
+
+for word in words:
+
+    r = process(word)
+
+    print(f"""
+Original Word : {r['Original']}
+Suffix        : {r['Suffix']}
+Grammar        : {r['Grammar']}
+Extracted Root : {r['Root']}
+Normalized     : {r['Normalized']}
+Final Output   : {r['Normalized']}
+""")
