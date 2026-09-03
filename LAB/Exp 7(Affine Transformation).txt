@@ -1,0 +1,24 @@
+import cv2
+import numpy as np
+from google.colab.patches import cv2_imshow
+
+# Read the image
+img_path = '//content/134253236052803564.jpg'
+img = cv2.imread(img_path)
+h, w = img.shape[:2]
+
+# Define 3 reference points from the original image (top-left, top-right, bottom-left)
+pts1 = np.float32([[50, 50], [200, 50], [50, 200]])
+
+# Define target locations for those 3 points (applies scaling, rotation, and shearing)
+pts2 = np.float32([[10, 100], [200, 50], [100, 250]])
+
+# Calculate the 2x3 Affine Transformation matrix
+M = cv2.getAffineTransform(pts1, pts2)
+
+# Apply the transformation
+affine_img = cv2.warpAffine(img, M, (w, h))
+
+# Display the transformed image
+print("Affine Transformed Image:")
+cv2_imshow(affine_img)

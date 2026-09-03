@@ -1,0 +1,40 @@
+import cv2
+import numpy as np
+from google.colab.patches import cv2_imshow
+
+# Read image
+img_path = '/content/134253236052803564.jpg'
+img = cv2.imread(img_path)
+h, w = img.shape[:2]
+
+# Define 4 source and destination point pairs
+pts_src = np.array([[0, 0], [w - 1, 0], [w - 1, h - 1], [0, h - 1]], dtype=np.float32)
+pts_dst = np.array([[60, 40], [w - 40, 20], [w - 60, h - 30], [40, h - 50]], dtype=np.float32)
+
+# Direct Linear Transformation (DLT) Algorithm
+def solve_dlt(src, dst):
+    A = []
+    for i in range(len(src)):
+        x, y = src[i][0], src[i][1]
+        u, v = dst[i][0], dst[i][1]
+        A.append([-x, -y, -1,  0,  0,  0, u*x, u*y, u])
+        A.append([ 0,  0,  0, -x, -y, -1, v*x, v*y, v])
+    A = np.array(A)
+
+    # Solve Ah = 0 using SVD (last row of V^T corresponds to smallest singular value)
+    _, _, Vt = np.linalg.svd(A)
+    H = Vt[-1].reshape(3, 3)
+
+    # Normalize homography matrix H
+    return H / H[2, 2]
+
+# Calculate Homography Matrix H via DLT
+H_dlt = solve_dlt(pts_src, pts_dst)
+
+# Apply DLT perspective transformation
+dlt_img = cv2.warpPerspective(img, H_dlt, (w, h))
+
+# Display matrix and result
+print("Computed DLT Matrix (H):\n", H_dlt)
+print("\nDLT Transformed Image:")
+cv2_imshow(dlt_img)

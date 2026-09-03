@@ -1,0 +1,26 @@
+import cv2
+import numpy as np
+from google.colab.patches import cv2_imshow
+
+# Read the image in grayscale
+img_path = '/content/134253236052803564.jpg'
+img = cv2.imread(img_path, cv2.IMREAD_GRAYSCALE)
+
+# Method 1: Calculate gradients separately along X and Y axes (Recommended)
+sobel_x = cv2.Sobel(img, cv2.CV_64F, 1, 0, ksize=3)
+sobel_y = cv2.Sobel(img, cv2.CV_64F, 0, 1, ksize=3)
+
+# Combine both gradients to compute the overall edge magnitude
+sobel_xy_combined = cv2.magnitude(sobel_x, sobel_y)
+sobel_xy_abs = cv2.convertScaleAbs(sobel_xy_combined)
+
+# Method 2: Direct Sobel calculation with dx=1, dy=1
+sobel_direct = cv2.Sobel(img, cv2.CV_64F, 1, 1, ksize=3)
+sobel_direct_abs = cv2.convertScaleAbs(sobel_direct)
+
+# Display results
+print("Sobel Combined XY-Axis (Magnitude):")
+cv2_imshow(sobel_xy_abs)
+
+print("Sobel Direct XY-Axis (dx=1, dy=1):")
+cv2_imshow(sobel_direct_abs)

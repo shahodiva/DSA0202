@@ -1,0 +1,18 @@
+import cv2
+import numpy as np
+from google.colab.patches import cv2_imshow
+
+# Read the image in grayscale
+img_path = '/content/134253236052803564.jpg'
+img = cv2.imread(img_path, cv2.IMREAD_GRAYSCALE)
+
+# Perform Sobel edge detection along the Y-axis (dx=0, dy=1)
+# Using cv2.CV_64F prevents data loss from negative gradients
+sobel_y = cv2.Sobel(img, cv2.CV_64F, 0, 1, ksize=3)
+
+# Convert the output back to an 8-bit unsigned integer (0-255)
+sobel_y_abs = cv2.convertScaleAbs(sobel_y)
+
+# Display results
+print("Sobel Edge Detection (Y-axis):")
+cv2_imshow(sobel_y_abs)

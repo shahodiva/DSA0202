@@ -1,0 +1,40 @@
+import cv2
+import numpy as np
+from google.colab.patches import cv2_imshow
+
+# Read the image (using the same image path as before)
+img_path = '/content/134253236052803564.jpg'
+img = cv2.imread(img_path)
+
+# Check if image was loaded
+if img is None:
+    print(f"Error: Could not load image from {img_path}")
+else:
+    h, w, _ = img.shape
+
+    # Define watermark text and properties
+    watermark_text = "Colab Watermark"
+    font = cv2.FONT_HERSHEY_SIMPLEX
+    font_scale = 3
+    font_thickness = 5
+    text_color = (0, 0, 255) # Red color (BGR)
+
+    # Get the size of the text
+    (text_w, text_h), baseline = cv2.getTextSize(watermark_text, font, font_scale, font_thickness)
+
+    # Calculate the position for the watermark (e.g., bottom-right corner with some padding)
+    padding = 20
+    text_x = w - text_w - padding
+    text_y = h - text_h - padding + baseline
+
+    # Create a transparent overlay for the watermark
+    overlay = img.copy()
+    cv2.putText(overlay, watermark_text, (text_x, text_y), font, font_scale, text_color, font_thickness, cv2.LINE_AA)
+
+    # Blend the overlay with the original image
+    # alpha (0.5) is the transparency of the watermark
+    watermarked_img = cv2.addWeighted(overlay, 0.5, img, 0.5, 0)
+
+    # Display the result
+    print("Image with Text Watermark:")
+    cv2_imshow(watermarked_img)

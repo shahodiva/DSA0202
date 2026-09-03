@@ -1,0 +1,47 @@
+import cv2
+import numpy as np
+from google.colab.patches import cv2_imshow
+
+# Read image (assuming img is already loaded from the previous cells)
+# If you run this cell independently, ensure img and img_path are defined.
+img_path = '/content/134253236052803564.jpg'
+img = cv2.imread(img_path)
+h, w = img.shape[:2]
+
+# Define 4 new source and destination point pairs for a different transformation
+# Original image corners for source
+pts_src_new = np.array([[0, 0], [w - 1, 0], [w - 1, h - 1], [0, h - 1]], dtype=np.float32)
+
+# Destination points to skew the image more significantly
+pts_dst_new = np.array([[w * 0.1, h * 0.2],
+                        [w * 0.9, h * 0.1],
+                        [w * 0.8, h * 0.9],
+                        [w * 0.2, h * 0.8]], dtype=np.float32)
+
+# Direct Linear Transformation (DLT) Algorithm function (re-using the one from cell hNqVriHtKV8n)
+def solve_dlt(src, dst):
+    A = []
+    for i in range(len(src)):
+        x, y = src[i][0], src[i][1]
+        u, v = dst[i][0], dst[i][1]
+        A.append([-x, -y, -1,  0,  0,  0, u*x, u*y, u])
+        A.append([ 0,  0,  0, -x, -y, -1, v*x, v*y, v])
+    A = np.array(A)
+
+    # Solve Ah = 0 using SVD
+    _, _, Vt = np.linalg.svd(A)
+    H = Vt[-1].reshape(3, 3)
+
+    # Normalize homography matrix H
+    return H / H[2, 2]
+
+# Calculate Homography Matrix H via DLT for the new points
+H_dlt_new = solve_dlt(pts_src_new, pts_dst_new)
+
+# Apply DLT perspective transformation with the new matrix
+dlt_img_new = cv2.warpPerspective(img, H_dlt_new, (w, h))
+
+# Display new matrix and result
+print("Computed DLT Matrix (H) for new points:\n", H_dlt_new)
+print("\nDLT Transformed Image (New Example):")
+cv2_imshow(dlt_img_new)

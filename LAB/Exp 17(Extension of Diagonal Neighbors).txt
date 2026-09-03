@@ -1,0 +1,27 @@
+import cv2
+import numpy as np
+from google.colab.patches import cv2_imshow
+
+# Read the image
+img_path = '/content/134253236052803564.jpg'
+img = cv2.imread(img_path)
+
+# Define 8-neighbor Laplacian Kernel (includes diagonal neighbors)
+laplacian_8neighbor = np.array([
+    [ 1,  1,  1],
+    [ 1, -8,  1],
+    [ 1,  1,  1]
+], dtype=np.float32)
+
+# Compute the Laplacian response (use CV_64F to prevent overflow)
+laplacian = cv2.filter2D(img, cv2.CV_64F, laplacian_8neighbor)
+
+# Sharpening formula for negative center: Original - Laplacian
+sharpened = img.astype(np.float64) - laplacian
+
+# Clip pixel values to valid range [0, 255] and convert to uint8
+sharpened = np.clip(sharpened, 0, 255).astype(np.uint8)
+
+# Display result
+print("Sharpened Image (8-Neighbor Diagonal Laplacian):")
+cv2_imshow(sharpened)
