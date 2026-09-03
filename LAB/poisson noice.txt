@@ -1,0 +1,18 @@
+import cv2
+import numpy as np
+
+img = cv2.imread(r"C:\Users\srava\OneDrive\Desktop\Pictures\house.jpg.png")
+
+if img is None:
+    print("Error: Image not found")
+else:
+    img1 = img.astype(np.float32) / 255
+
+    poisson = np.random.poisson(img1 * 255) / 255
+    poisson = np.clip(poisson * 255, 0, 255).astype(np.uint8)
+
+    cv2.imshow("Original Image", img)
+    cv2.imshow("Poisson Noise", poisson)
+
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()

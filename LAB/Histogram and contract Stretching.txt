@@ -1,0 +1,21 @@
+import cv2
+import numpy as np
+from matplotlib import pyplot as plt
+
+img = cv2.imread(r"C:\Users\srava\OneDrive\Desktop\Pictures\Screenshot 2026-07-11 140801.png")
+
+gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+
+hist = cv2.calcHist([gray], [0], None, [256], [0, 256])
+
+stretch = cv2.normalize(gray, None, 0, 255, cv2.NORM_MINMAX)
+
+cv2.imshow("Gray", gray)
+cv2.imshow("Contrast Stretching", stretch)
+
+plt.plot(hist)
+plt.title("Histogram")
+plt.show()
+
+cv2.waitKey(0)
+cv2.destroyAllWindows()
